@@ -150,6 +150,12 @@ const SideBar = () => {
             colors={colors}
             icon={<DashboardOutlined />}
           />
+          <Item
+            title="Manage Team"
+            path="/team"
+            colors={colors}
+            icon={<PeopleAltOutlined />}
+          />
         </Menu>
         {/* <Typography
           variant="h6"

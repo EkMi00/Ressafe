@@ -6,7 +6,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { tokens, ColorModeContext } from "../../../theme";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   DarkModeOutlined,
   LightModeOutlined,
@@ -18,13 +18,20 @@ import {
 } from "@mui/icons-material";
 import { ToggledContext } from "../../../App";
 
-const Navbar = () => {
+const Navbar = ({ onSearch }) => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   const { toggled, setToggled } = useContext(ToggledContext);
   const isMdDevices = useMediaQuery("(max-width:768px)");
   const isXsDevices = useMediaQuery("(max-width:466px)");
   const colors = tokens(theme.palette.mode);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = () => {
+    onSearch(searchQuery);
+  };
+
   return (
     <Box
       display="flex"
@@ -44,10 +51,20 @@ const Navbar = () => {
           alignItems="center"
           bgcolor={colors.primary[400]}
           borderRadius="3px"
-          sx={{ display: `${isXsDevices ? "none" : "flex"}` }}
+          sx={{ display: `${isXsDevices ? "none" : "flex"}`, width: "400px", height: "40px"  }}
         >
-          <InputBase placeholder="Search" sx={{ ml: 2, flex: 1 }} />
-          <IconButton type="button" sx={{ p: 1 }}>
+          <InputBase
+            placeholder="News, Website"
+            sx={{ ml: 2, flex: 1 }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
+          />
+          <IconButton type="button" sx={{ p: 1 }} onClick={handleSearch}>
             <SearchOutlined />
           </IconButton>
         </Box>

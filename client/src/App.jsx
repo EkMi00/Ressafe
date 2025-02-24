@@ -27,7 +27,7 @@ function App() {
                 maxWidth: "100%",
               }}
             >
-              <Navbar />
+              {/* <Navbar /> */}
               <Box sx={{ overflowY: "auto", flex: 1, maxWidth: "100%" }}>
                 <Outlet />
               </Box>

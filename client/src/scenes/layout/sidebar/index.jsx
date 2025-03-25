@@ -99,7 +99,7 @@ const SideBar = () => {
             mb: "25px",
           }}
         >
-          <Avatar
+          {/* <Avatar
             alt="avatar"
             src={avatar}
             sx={{ width: "100px", height: "100px" }}
@@ -115,7 +115,7 @@ const SideBar = () => {
             >
               Admin
             </Typography>
-          </Box>
+          </Box> */}
         </Box>
       )}
       
@@ -145,16 +145,16 @@ const SideBar = () => {
             icon={<DashboardOutlined />}
           />
           <Item
-            title="Profile"
-            path="/customer"
+            title="Sample Review"
+            path="/review/0"
             colors={colors}
             icon={<DashboardOutlined />}
           />
           <Item
-            title="Manage Team"
-            path="/team"
+            title="Sample Form"
+            path="/form"
             colors={colors}
-            icon={<PeopleAltOutlined />}
+            icon={<DashboardOutlined />}
           />
         </Menu>
         {/* <Typography

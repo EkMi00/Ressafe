@@ -1,164 +1,212 @@
-import { Box, Button, TextField, useMediaQuery } from "@mui/material";
-import { Header } from "../../components";
-import { Formik } from "formik";
-import * as yup from "yup";
-
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  contact: "",
-  address1: "",
-  address2: "",
-};
-
-const phoneRegExp =
-  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-
-const checkoutSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  contact: yup
-    .string()
-    .matches(phoneRegExp, "Phone number is not valid")
-    .required("required"),
-  address1: yup.string().required("required"),
-  address2: yup.string().required("required"),
-});
-
-const Form = () => {
-  const isNonMobile = useMediaQuery("(min-width:600px)");
-  const handleFormSubmit = (values, actions) => {
-    console.log(values);
-    actions.resetForm({
-      values: initialValues,
+import { 
+    Box, 
+    Typography, 
+    TextField, 
+    Button, 
+    FormControl, 
+    FormLabel, 
+    FormGroup, 
+    FormControlLabel, 
+    Checkbox, 
+    Grid 
+  } from "@mui/material";
+  import React, { useState } from "react";
+  import NavBar from "../layout/navbar";
+  
+  const positiveAdjectives = [
+    "Reliable", "Trustworthy", "Accurate", "Authoritative", "Verified"
+  ];
+  
+  const negativeAdjectives = [
+    "Biased", "Misleading", "Sensationalized", "Inaccurate", "Unreliable"
+  ];
+  
+  const ambiguousAdjectives = [
+    "Controversial", "Interpretive", "Opinionated", "Subjective", "Speculative"
+  ];
+  
+  function ArticleForm() {
+    const [formData, setFormData] = useState({
+      url: "",
+      rating: "",
+      comments: "",
+      positive: [],
+      negative: [],
+      ambiguous: []
     });
-  };
-  return (
-    <Box m="20px">
-      <Header title="CREATE USER" subtitle="Create a New User Profile" />
-
-      <Formik
-        onSubmit={handleFormSubmit}
-        initialValues={initialValues}
-        validationSchema={checkoutSchema}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => (
-          <form onSubmit={handleSubmit}>
-            <Box
-              display="grid"
-              gap="30px"
-              gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-              sx={{
-                "& > div": {
-                  gridColumn: isNonMobile ? undefined : "span 4",
-                },
-              }}
-            >
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="First Name"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.firstName}
-                name="firstName"
-                error={touched.firstName && errors.firstName}
-                helperText={touched.firstName && errors.firstName}
-                sx={{
-                  gridColumn: "span 2",
-                }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Last Name"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.lastName}
-                name="lastName"
-                error={touched.lastName && errors.lastName}
-                helperText={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 2" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Email"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.email}
-                name="email"
-                error={touched.email && errors.email}
-                helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Contact Number"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.contact}
-                name="contact"
-                error={touched.contact && errors.contact}
-                helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Address 1"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address1}
-                name="address1"
-                error={touched.address1 && errors.address1}
-                helperText={touched.address1 && errors.address1}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Address 2"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address2}
-                name="address2"
-                error={touched.address2 && errors.address2}
-                helperText={touched.address2 && errors.address2}
-                sx={{ gridColumn: "span 4" }}
-              />
-            </Box>
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="end"
-              mt="20px"
-            >
-              <Button type="submit" color="secondary" variant="contained">
-                Create New User
-              </Button>
-            </Box>
-          </form>
-        )}
-      </Formik>
-    </Box>
-  );
-};
-
-export default Form;
+  
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    };
+  
+    const handleCheckboxChange = (category, adjective) => {
+      setFormData((prevData) => {
+        const updatedCategory = prevData[category].includes(adjective)
+          ? prevData[category].filter(item => item !== adjective)
+          : [...prevData[category], adjective];
+        return { ...prevData, [category]: updatedCategory };
+      });
+    };
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      // Process the form data (e.g., send it to an API)
+      console.log("Form submitted:", formData);
+  
+      try {
+        const response = await fetch("http://localhost:8000/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+  
+        const result = await response.json();
+        console.log("Success:", result);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    const handleAutoFill = () => {
+      setFormData({
+        url: "https://www.straitstimes.com/world/middle-east/israel-panel-approves-2025-budget-set-for-final-vote-in-parliament-by-end-march",
+        rating: "helpful",
+        comments: "This article provides detailed information about the budget approval process in Israel.",
+        positive: ["Reliable", "Trustworthy"],
+        negative: [],
+        ambiguous: []
+      });
+    };
+  
+    return (
+      <Box m="20px">
+        <NavBar />
+        <Box mt="20px">
+          <Typography variant="h4" gutterBottom>
+            Rate a News Article
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              {formData.url && (
+                <Box mb="20px">
+                  <iframe
+                    src={formData.url}
+                    title="News Article"
+                    width="100%"
+                    height="500px"
+                    style={{ border: "1px solid #ccc" }}
+                  />
+                </Box>
+              )}
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <form onSubmit={handleSubmit}>
+                <Box mb="20px">
+                  <TextField
+                    fullWidth
+                    label="Article URL"
+                    name="url"
+                    value={formData.url}
+                    onChange={handleChange}
+                    required
+                  />
+                </Box>
+                <Grid container spacing={3}>
+                  <Grid item xs={4}>
+                    <FormControl component="fieldset">
+                      <FormLabel component="legend">Positive Adjectives (High Credibility)</FormLabel>
+                      <FormGroup>
+                        {positiveAdjectives.map((adjective) => (
+                          <FormControlLabel
+                            key={adjective}
+                            control={
+                              <Checkbox
+                                checked={formData.positive.includes(adjective)}
+                                onChange={() => handleCheckboxChange("positive", adjective)}
+                                name="positive"
+                              />
+                            }
+                            label={adjective}
+                          />
+                        ))}
+                      </FormGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <FormControl component="fieldset">
+                      <FormLabel component="legend">Negative Adjectives (Low Credibility)</FormLabel>
+                      <FormGroup>
+                        {negativeAdjectives.map((adjective) => (
+                          <FormControlLabel
+                            key={adjective}
+                            control={
+                              <Checkbox
+                                checked={formData.negative.includes(adjective)}
+                                onChange={() => handleCheckboxChange("negative", adjective)}
+                                name="negative"
+                              />
+                            }
+                            label={adjective}
+                          />
+                        ))}
+                      </FormGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <FormControl component="fieldset">
+                      <FormLabel component="legend">Ambiguous Adjectives (Neutral or Context-Dependent)</FormLabel>
+                      <FormGroup>
+                        {ambiguousAdjectives.map((adjective) => (
+                          <FormControlLabel
+                            key={adjective}
+                            control={
+                              <Checkbox
+                                checked={formData.ambiguous.includes(adjective)}
+                                onChange={() => handleCheckboxChange("ambiguous", adjective)}
+                                name="ambiguous"
+                              />
+                            }
+                            label={adjective}
+                          />
+                        ))}
+                      </FormGroup>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Box mb="20px">
+                  <TextField
+                    fullWidth
+                    label="Comments"
+                    name="comments"
+                    value={formData.comments}
+                    onChange={handleChange}
+                    multiline
+                    rows={6}
+                    placeholder="Elaborate on your choice (up to 6 lines)"
+                  />
+                </Box>
+                <Button variant="contained" color="primary" type="submit">
+                  Submit
+                </Button>
+                <Button variant="outlined" color="secondary" onClick={handleAutoFill} style={{ marginLeft: "10px" }}>
+                  Auto Fill
+                </Button>
+              </form>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    );
+  }
+  
+  export default ArticleForm;

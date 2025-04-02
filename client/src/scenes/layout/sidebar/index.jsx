@@ -146,7 +146,7 @@ const SideBar = () => {
           />
           <Item
             title="Sample Review"
-            path="/review/0"
+            path="/review/1q87yvxa"
             colors={colors}
             icon={<DashboardOutlined />}
           />

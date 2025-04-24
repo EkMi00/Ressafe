@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     -- user_id CHAR(8) NOT NULL REFERENCES users(user_id),
     -- ratingScore DECIMAL(2,2) NOT NULL CHECK (ratingScore >= 1.0 AND ratingScore <= 5.0),
     rating VARCHAR(32) NOT NULL,
-    comments MEDIUMTEXT,
+    comments TEXT,
     positive JSON,
     negative JSON,
     ambiguous JSON,

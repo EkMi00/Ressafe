@@ -75,7 +75,7 @@ function Dashboard() {
                       title={`Article ${index}`}
                       style={{
                         width: "100%",
-                        height: "200px",
+                        height: "250px",
                         border: "none",
                         marginTop: "10px",
                       }}

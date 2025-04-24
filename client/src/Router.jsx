@@ -5,6 +5,7 @@ import {
   Dashboard,
   ArticleForm,
   ArticleReview,
+  SuccessPage,
 } from "./scenes";
 
 const AppRouter = () => {
@@ -15,6 +16,7 @@ const AppRouter = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="/form" element={<ArticleForm />} />
           <Route path="/review/:article_id" element={<ArticleReview />} />
+          <Route path="/success/:articleId" element={<SuccessPage />} />
         </Route>
       </Routes>
     </Router>

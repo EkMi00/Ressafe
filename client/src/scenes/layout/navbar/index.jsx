@@ -17,6 +17,7 @@ import {
   SettingsOutlined,
 } from "@mui/icons-material";
 import { ToggledContext } from "../../../App";
+import qrImage from "../../../assets/images/qr.png"; // Import the QR image
 
 const Navbar = ({ onSearch }) => {
   const theme = useTheme();
@@ -87,6 +88,16 @@ const Navbar = ({ onSearch }) => {
         <IconButton>
           <PersonOutlined />
         </IconButton>
+        <Box
+          component="img"
+          src={qrImage}
+          alt="QR Code"
+          sx={{
+            width: "75px",
+            height: "75px",
+            ml: 2,
+          }}
+        />
       </Box>
     </Box>
   );

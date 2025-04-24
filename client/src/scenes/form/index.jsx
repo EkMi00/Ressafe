@@ -8,8 +8,11 @@ import {
 import React, { useState } from "react";
 import NavBar from "../layout/navbar";
 import { addArticle, checkArticleId } from "../API/index"; // Import checkArticleId method
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function ArticleForm() {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const [formData, setFormData] = useState({
     article_id: "", // Add article_id field
     url: "",
@@ -61,7 +64,8 @@ function ArticleForm() {
 
     try {
       const response = await addArticle(updatedFormData); // Use addArticle to post the request
-      // console.log("Review added successfully:", response);
+      // Navigate to the success page with the article ID
+      navigate(`/success/${updatedFormData.article_id}`);
     } catch (error) {
       console.error("Error adding review:", error);
     }
@@ -72,7 +76,7 @@ function ArticleForm() {
       article_id: "1q87yvxa", // Generate a random article_id
       date: getCurrentDate(), // Set the current date
       url: "https://www.straitstimes.com/world/middle-east/israel-panel-approves-2025-budget-set-for-final-vote-in-parliament-by-end-march",
-      comment: "The article from The Straits Times titled 'Israel panel approves 2025 budget, set for final vote in parliament by end-March' reports on the Israeli government's budget approval process.",
+      comment: `The article from The Straits Times reports on Israel's 2025 budget approval process, highlighting steps taken by the parliament.`,
       summary: "The article outlines the steps taken by Israel’s parliament to approve the 2025 budget.",
     });
   };

@@ -69,6 +69,7 @@ fastapi run src/main.py --port 8000
 ## Running Locally
 - Ensure that in client your `.env` file is empty
 - Then run all the steps in the `setup`.
+- Open URL: [http://localhost:5173](http://localhost:5173)
 
 ## Deploying by Ngrok
 - Run all the steps in the `setup`.
@@ -93,4 +94,5 @@ tunnels:
 
 - Run `Ressafe/run.sh`
 - Run `ngrok start --all`
+- Open your static ngrok URL
 
